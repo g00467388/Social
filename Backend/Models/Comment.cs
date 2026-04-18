@@ -1,5 +1,3 @@
-using Backend.Models;
-
 public class Comment : CommentRequest
 {
     public Guid ID; 
