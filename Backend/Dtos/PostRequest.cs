@@ -1,12 +1,16 @@
 
-public class PostRequest
+public record PostRequest : Dto
 {
-    public string Title = string.Empty;
-    public string Body = string.Empty;
+    public string Title {get; set;} = string.Empty;
+    public string Body {get; set;} = string.Empty;
 
     public PostRequest(string title, string body)
     {
         this.Title = title;
         this.Body = body;
+    }
+    public PostRequest()
+    {
+        
     }
 }
