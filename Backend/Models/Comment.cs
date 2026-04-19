@@ -1,10 +1,14 @@
-public class Comment : CommentRequest
+public record Comment : CommentRequest
 {
-    public Guid ID; 
     public DateTime CreationDate;
 
-    public Comment(string content, Post post) :base(content, post)
+    public Comment(string content, Guid postId) :base(content, postId)
     {
         CreationDate = DateTime.UtcNow;
     }
+    public Comment()
+    {
+        
+    }
+
 }

@@ -1,11 +1,15 @@
-public class CommentRequest
+public record CommentRequest : Dto
 {
     public string Content; 
-    public Post post;
+    public Guid PostID;
 
-    public CommentRequest(string content, Post post)
+    public CommentRequest(string content, Guid postId)
     {
-        this.Content = content; 
-        this.post = post;
+        Content = content; 
+        PostID = postId;
+    }
+    public CommentRequest()
+    {
+        
     }
 }
