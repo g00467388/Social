@@ -2,17 +2,18 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Post } from '../models/post';
 import { Observable } from 'rxjs';
+import { PostResponse } from '../models/postResponse';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PostService {
-  BaseUrl: string = "http://localhost:5146"
+  BaseUrl: string = "http://localhost:5188"
   constructor(private httpClient: HttpClient) { }
 
-  async GetAllPosts(): Promise<Observable<Post[]>> {
-    return await this.httpClient.get<Post[]>(this.BaseUrl + "/post/all");
-  }
+ GetAllPosts(): Observable<PostResponse[]> {
+  return this.httpClient.get<PostResponse[]>(this.BaseUrl + "/post/all");
+}
   
     async GetPostByTitle(title :string): Promise<Observable<Post[]>> {
 
