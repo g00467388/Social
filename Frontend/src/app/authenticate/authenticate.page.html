@@ -1,0 +1,42 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    @if(isSignInPage)
+    {
+    <ion-title>Sign up</ion-title>
+
+    }
+    @else {
+    <ion-title>Log in</ion-title>
+    }
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      @if(isSignInPage)
+      {
+      <ion-title size="large">Sign up</ion-title>
+      }
+      @else
+      {
+      <ion-title size="large">Log in</ion-title>
+      }
+    </ion-toolbar>
+
+  </ion-header>
+  <ion-label>Username</ion-label>
+  <ion-input [(ngModel)]="auth.username"></ion-input>
+
+  <ion-label>Password</ion-label>
+  <ion-input [(ngModel)]="auth.password"></ion-input>
+  @if(!isSignInPage)
+  {
+  <p>Navigate to <a (click)="SwapAuthPage()">sign up</a> </p>
+  }
+  @else
+  {
+  <p>Navigate to <a (click)="SwapAuthPage()">log in</a> </p>
+  }
+</ion-content>
+<ion-button (click)="submit()">Confirm</ion-button>
