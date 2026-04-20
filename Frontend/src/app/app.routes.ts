@@ -10,4 +10,12 @@ export const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full',
   },
+  {
+    path: 'authenticate',
+    loadComponent: () => import('./authenticate/authenticate.page').then( m => m.AuthenticatePage)
+  },
+  {
+    path: 'create-post',
+    loadComponent: () => import('./create-post/create-post.page').then( m => m.CreatePostPage)
+  },
 ];
