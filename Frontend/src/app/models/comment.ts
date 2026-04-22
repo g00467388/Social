@@ -1,4 +1,4 @@
-export class comment 
+export class Comment 
 {
     id : number = 0
     postId :number = 0

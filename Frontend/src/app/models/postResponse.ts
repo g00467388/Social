@@ -1,4 +1,4 @@
-import { comment } from "./comment";
+import { Comment } from "./comment";
 
 export class PostResponse {
     id :number = 0;
@@ -7,5 +7,5 @@ export class PostResponse {
     createdAt :Date = new Date
     userId : string = ""
     username : string = ""
-    comments :comment[] = [];
+    comments :Comment[] = [];
 }
