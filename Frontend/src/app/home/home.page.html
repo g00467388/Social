@@ -43,6 +43,7 @@
 
               <ion-list>
                 @for (c of selectedPost?.comments; track $index) {
+                  
                 <ion-item>
                   <ion-label>
                     <strong>{{ c.username }}</strong>
@@ -51,9 +52,21 @@
                 </ion-item>
                 }
               </ion-list>
+              
             </div>
           </ion-content>
+<ion-item>
+  <ion-input label="Comment" labelPlacement="stacked" [(ngModel)]="comment.content"></ion-input>
+  <ion-button (click)="submitComment()">Submit</ion-button>
+
+</ion-item>
+
+          <ion-item>
+            <ion-input></ion-input>
+          </ion-item>
+            
         </ng-template>
+        
       </ion-modal>
 
     </ion-toolbar>
