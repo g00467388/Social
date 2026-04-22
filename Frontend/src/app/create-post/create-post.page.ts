@@ -11,7 +11,7 @@ import { Post } from '../models/post';
   standalone: true,
   imports: [IonInput, IonLabel, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton]
 })
-export class CreatePostPage implements OnInit {
+export class CreatePostPage {
 
   post :Post = new Post(); 
   constructor(private httpClient :HttpClient) { }
@@ -20,8 +20,8 @@ export class CreatePostPage implements OnInit {
   }
 
   async submit() {
-    
-    this.httpClient.post("http://localhost:5188/post", this.post).subscribe();
+    console.log(this.post);
+    this.httpClient.post("http://localhost:5188/post", this.post, {withCredentials: true}).subscribe();
   }
 
 }
