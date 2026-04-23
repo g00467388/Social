@@ -3,24 +3,22 @@ import { Injectable } from '@angular/core';
 import { Post } from '../models/post';
 import { Observable } from 'rxjs';
 import { PostResponse } from '../models/postResponse';
+import { Endpoints } from '../helpers/endpoints';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PostService {
-  BaseUrl: string = "http://localhost:5188"
   constructor(private httpClient: HttpClient) { }
 
- GetAllPosts(): Observable<PostResponse[]> {
-  return this.httpClient.get<PostResponse[]>(this.BaseUrl + "/post/all");
-}
-  
-    async GetPostByTitle(title :string): Promise<Observable<Post[]>> {
-
-    let searchParams : HttpParams = new HttpParams()
-    searchParams.set("Title: ", title)
-
-    return await this.httpClient.get<Post[]>(this.BaseUrl, {params: searchParams} );
+  GetAllPosts(): Observable<PostResponse[]> {
+    return this.httpClient.get<PostResponse[]>(Endpoints.REQUEST_POST_LIST);
   }
+GetPostByTitle(title: string): Observable<PostResponse[]> {
+  console.log("service title value: " + title)
+  return this.httpClient.get<PostResponse[]>(Endpoints.REQUEST_POST_BY_TITLE + "?title=" + title );
+}
+
+    
 
 }
