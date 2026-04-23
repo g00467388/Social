@@ -1,42 +1,49 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    @if(isSignInPage)
-    {
-    <ion-title>Sign up</ion-title>
-
-    }
-    @else {
-    <ion-title>Log in</ion-title>
-    }
+    <ion-title>{{ isSignupPage ? 'Sign up' : 'Log in' }}</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-buttons>
+      <ion-button routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" expand="block">
+        <ion-icon slot="start" name="home-outline"></ion-icon>
+        Home
+      </ion-button>
+   
+      <ion-button routerLink="/create-post" routerLinkActive="active" expand="block">
+        <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+        Create
+      </ion-button>
+      <ion-button routerLink="/authenticate" routerLinkActive="active" expand="block">
+        <ion-icon slot="start" name="person-outline"></ion-icon>
+        Account
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content class="ion-padding">
+
   <ion-header collapse="condense">
     <ion-toolbar>
-      @if(isSignInPage)
-      {
-      <ion-title size="large">Sign up</ion-title>
-      }
-      @else
-      {
-      <ion-title size="large">Log in</ion-title>
-      }
+      <ion-title size="large">
+        {{ isSignupPage ? 'Sign up' : 'Log in' }}
+      </ion-title>
     </ion-toolbar>
-
   </ion-header>
-  <ion-label>Username</ion-label>
-  <ion-input [(ngModel)]="auth.username"></ion-input>
+       <h2> {{ isSignupPage ? 'Sign up' : 'Log in' }}</h2>
 
-  <ion-label>Password</ion-label>
-  <ion-input [(ngModel)]="auth.password"></ion-input>
-  @if(!isSignInPage)
-  {
-  <p>Navigate to <a (click)="SwapAuthPage()">sign up</a> </p>
-  }
-  @else
-  {
-  <p>Navigate to <a (click)="SwapAuthPage()">log in</a> </p>
-  }
+
+  <ion-input [(ngModel)]="auth.username" placeholder="username..."></ion-input>
+
+  <ion-input [(ngModel)]="auth.password" type="password" placeholder="password..."></ion-input>
+
+  <p>
+    Navigate to 
+    <a (click)="SwapAuthPage()">
+      {{ isSignupPage ? 'log in' : 'sign up' }}
+    </a>
+  </p>
+
+  <ion-button expand="block" (click)="submit()">Confirm</ion-button>
+
 </ion-content>
-<ion-button (click)="submit()">Confirm</ion-button>

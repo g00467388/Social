@@ -2,6 +2,26 @@
   <ion-toolbar>
     <ion-title>Create post</ion-title>
   </ion-toolbar>
+  <ion-toolbar>
+    <ion-buttons>
+      <ion-button routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" expand="block">
+        <ion-icon slot="start" name="home-outline"></ion-icon>
+        Home
+      </ion-button>
+      <ion-button routerLink="/my-posts" routerLinkActive="active" expand="block">
+        <ion-icon slot="start" name="document-outline"></ion-icon>
+        My Posts
+      </ion-button>
+      <ion-button routerLink="/create-post" routerLinkActive="active" expand="block">
+        <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+        Create
+      </ion-button>
+      <ion-button routerLink="/authenticate" routerLinkActive="active" expand="block">
+        <ion-icon slot="start" name="person-outline"></ion-icon>
+        Account
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
