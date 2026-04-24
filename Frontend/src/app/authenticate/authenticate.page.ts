@@ -6,6 +6,7 @@ import { Auth } from '../models/auth';
 import { HttpClient } from '@angular/common/http';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../services/auth-service';
+import { ThemeService } from '../services/theme-service';
 
 @Component({
   selector: 'app-authenticate',
@@ -18,6 +19,7 @@ import { AuthService } from '../services/auth-service';
   ]
 })
 export class AuthenticatePage {
+  themeService : ThemeService = ThemeService.getInstance();
 
   auth: Auth = new Auth();
   isSignupPage: boolean = true;
@@ -35,6 +37,10 @@ export class AuthenticatePage {
       this.authService.submitSignup(this.auth);
     else
       this.authService.submitLogin(this.auth);
+  }
+
+  toggleTheme() {
+    this.themeService.toggleTheme()
   }
 
 }
