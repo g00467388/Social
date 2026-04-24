@@ -5,6 +5,6 @@ Capacitor usage can be located in the both the services/auth-service.ts file and
 ## Theme service 
 Theme service is a singleton class used to modify the theme the program is currently using, it saves the current theme in preferences and then applies it upon each click of the "Change theme" button 
 
-* HttpClient usage 
+# HttpClient usage
 HttpClient usage is ubiquitous in this program, it is used primarily in *services/auth-service.ts* and *services/post-service.ts* 
 
