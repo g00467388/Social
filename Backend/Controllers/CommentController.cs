@@ -1,64 +1,68 @@
-/*
+
+using System.Collections.ObjectModel;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Authorize]
 public class CommentController : ControllerBase
 {
     private readonly ILogger<CommentController> _logger;
-    private readonly CommentService _service;
-    public CommentController(ILogger<CommentController> logger, CommentService service)
+    private readonly CommentService _commentService;
+    private readonly PostService _postService;
+    private readonly ApplicationDbContext _context;
+
+    private readonly UserManager<User> _userManager;
+    public CommentController(ILogger<CommentController> logger,
+    CommentService service, PostService postService, UserManager<User> userManager, ApplicationDbContext context)
     {
         _logger = logger;
-        _service = service;
+        _commentService = service;
+        _postService = postService;
+        _userManager = userManager;
+        _context = context;
     }
 
 
     [HttpGet("all")]
     public async Task<ActionResult<IEnumerable<Post>>> GetCommentsAsync()
-          => Ok(await _service.GetAllAsync());
+          => Ok(await _commentService.GetAllAsync());
 
-    [HttpPost]
-    public async Task<ActionResult<Post>> CreateCommentAsync(CommentRequest commentRequest)
+    [HttpPost("post/comments")]
+    public async Task<ActionResult> CreateComment([FromBody] CommentRequest commentRequest)
     {
-        if (string.IsNullOrWhiteSpace(commentRequest.Content) || commentRequest.Post.ID == Guid.Empty)
-            return BadRequest("comment is missing content or title");
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        Comment comment = new Comment(commentRequest.Content, commentRequest.Post);
-        if (await _service.InsertAsync(comment))
+        if (userId is null)
+            return Unauthorized();
+        Console.WriteLine($"Post ID: {commentRequest.PostID}\nContent: {commentRequest.Content}");
+
+        if (!Guid.TryParse(commentRequest.PostID, out var postGuid))    
+            return BadRequest("Invalid PostID format. Must be a GUID.");
+
+
+        // Lookup post by GUID
+        var post = await _context.Posts
+            .FirstOrDefaultAsync(x => x.ID == postGuid);
+
+        if (post is null)
+            return NotFound($"No such post with id '{commentRequest.PostID}' exists");
+
+
+        var comment = new Comment()
         {
-            _logger.LogDebug("saved comment {id}", comment.ID);
-            return Ok(comment);
-        }
-
-        _logger.LogDebug("Failed to save comment {id}", comment.ID);
-        return BadRequest("failed to save comment");
+            UserId = userId,
+            PostID = post.ID.ToString(),
+            Content = commentRequest.Content,
+        };
+        _context.Add(comment);
+        await _context.SaveChangesAsync();
+        return Ok();
     }
-
-    [HttpGet]
-    public async Task<ActionResult<Post>> GetPostsAsync(Guid Id)
-    {
-        var result = _service.GetByIdAsync(Id);
-        if (result == null)
-            return BadRequest($"No such comment exists with ID {Id}");
-
-        return Ok(result);
-    }
-
-
-
-
-    [HttpDelete("delete")]
-    public async Task<ActionResult<Post>> DeleteCommentAsync(Comment comment)
-    {
-        if (await _service.DeleteAsync(comment))
-            return Ok(comment);
-        return BadRequest("No such comment exists");
-    }
-
-
 }
-*/

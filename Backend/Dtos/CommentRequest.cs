@@ -1,9 +1,9 @@
-public record CommentRequest : Dto
+public record CommentRequest 
 {
-    public string Content; 
-    public Guid PostID;
+    public string Content {get; set;} 
+    public string PostID {get; set;}
 
-    public CommentRequest(string content, Guid postId)
+    public CommentRequest(string content, string postId)
     {
         Content = content; 
         PostID = postId;

@@ -1,8 +1,16 @@
+using System.ComponentModel.DataAnnotations;
+
 public record Comment : CommentRequest
 {
+    [Key]
+    public Guid ID {get; set;}
     public DateTime CreationDate;
-
-    public Comment(string content, Guid postId) :base(content, postId)
+    
+    
+    public string UserId {get; set;}
+    public User User {get; set;}
+    
+    public Comment(string content, string postId) :base(content, postId)
     {
         CreationDate = DateTime.UtcNow;
     }

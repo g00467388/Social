@@ -11,6 +11,8 @@ export const enum Endpoints
     REQUEST_REGISTER = `${baseUrl}/auth/register`,
     REQUEST_POST = `${baseUrl}/post`,
     REQUEST_POST_LIST = `${baseUrl}/post/all`,
+    REQUEST_POST_DELETE = `${baseUrl}/post`,
+    
     REQUEST_POST_BY_TITLE = `${baseUrl}/post/title`,
     REQUEST_COMMENT = `${baseUrl}/comment`,
     

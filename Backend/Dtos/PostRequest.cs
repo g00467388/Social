@@ -1,13 +1,13 @@
 
-public record PostRequest : Dto
+public record PostRequest 
 {
     public string Title {get; set;} = string.Empty;
     public string Body {get; set;} = string.Empty;
 
     public PostRequest(string title, string body)
     {
-        this.Title = title;
-        this.Body = body;
+        Title = title;
+        Body = body;
     }
     public PostRequest()
     {

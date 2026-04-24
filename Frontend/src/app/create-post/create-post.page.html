@@ -4,36 +4,29 @@
   </ion-toolbar>
   <ion-toolbar>
     <ion-buttons>
-      <ion-button routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" expand="block">
+      <ion-button routerLink="/home" routerLinkActive="active" expand="block">
         <ion-icon slot="start" name="home-outline"></ion-icon>
         Home
       </ion-button>
-      <ion-button routerLink="/my-posts" routerLinkActive="active" expand="block">
-        <ion-icon slot="start" name="document-outline"></ion-icon>
-        My Posts
-      </ion-button>
-      <ion-button routerLink="/create-post" routerLinkActive="active" expand="block">
-        <ion-icon slot="start" name="add-circle-outline"></ion-icon>
-        Create
-      </ion-button>
+
       <ion-button routerLink="/authenticate" routerLinkActive="active" expand="block">
-        <ion-icon slot="start" name="person-outline"></ion-icon>
         Account
       </ion-button>
+      
+      <ion-button expand="block" (click)="toggleTheme()">Change theme</ion-button>
+
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Create post</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
 
-  <ion-label>Title</ion-label>
+  <ion-label position="stacked">Title</ion-label>
   <ion-input placeholder="epic title" [(ngModel)]="post.title"></ion-input>
-  <ion-label>Content</ion-label>
-  <ion-input placeholder="even epic-er content" [(ngModel)]="post.content"></ion-input>
-  <ion-button (click)="submit()">Submit</ion-button>
+
+  <ion-label position="stacked" class="ion-margin-top">Content</ion-label>
+  <ion-textarea auto-grow="true" placeholder="even epic-er content" [(ngModel)]="post.content"></ion-textarea>
+
+  <ion-button expand="block" class="ion-margin-top" (click)="submit()">Submit</ion-button>
+
 </ion-content>
