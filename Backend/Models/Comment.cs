@@ -1,22 +1,12 @@
-using System.ComponentModel.DataAnnotations;
-
-public record Comment : CommentRequest
+namespace backend.Models
 {
-    [Key]
-    public Guid ID {get; set;}
-    public DateTime CreationDate;
-    
-    
-    public string UserId {get; set;}
-    public User User {get; set;}
-    
-    public Comment(string content, string postId) :base(content, postId)
+    public class Comment
     {
-        CreationDate = DateTime.UtcNow;
+        public int Id { get; set; }
+        public int PostId { get; set; }
+        public string Content { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public string UserId { get; set; }
+        public ApplicationUser User { get; set; }
     }
-    public Comment()
-    {
-        
-    }
-
 }
