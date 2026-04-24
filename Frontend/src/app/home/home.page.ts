@@ -10,6 +10,9 @@ import { RouterLinkActive, RouterModule } from "@angular/router";
 import { AuthenticatePage } from '../authenticate/authenticate.page';
 import { RouterLink } from '@angular/router';
 import { Endpoints } from '../helpers/endpoints';
+import { ThemeService } from '../services/theme-service';
+import { Share } from '@capacitor/share';
+import { AuthService } from '../services/auth-service';
 
 @Component({
   selector: 'app-home',
@@ -18,34 +21,41 @@ import { Endpoints } from '../helpers/endpoints';
   imports: [IonCol, IonGrid, IonRow, IonChip, IonAvatar, IonIcon, RouterModule, IonNav, IonText, IonLabel, IonList, IonModal, IonButtons, IonButton, IonItem, IonInput, IonCardContent, IonCardSubtitle,
     IonCardTitle, IonCardHeader, IonCard, IonSearchbar, IonHeader, IonToolbar, IonTitle, IonContent, IonInfiniteScroll, FormsModule, RouterLinkActive, IonRouterLink],
 })
-export class HomePage  {
-constructor(private postService : PostService, private httpclient : HttpClient) {}
-AuthenticateRoute = AuthenticatePage;
-  
-searchQuery: string = ""
-initialPosts: PostResponse[] = []
-filteredPosts: PostResponse[] = []
-comment: CommentRequest = new(CommentRequest)
-  
-ionViewWillEnter(): void {
-  this.postService.GetAllPosts().subscribe(response => {
-    this.initialPosts = response;
-    this.filteredPosts = response;
-  });
-}
+export class HomePage {
+  private loggedInUsername: string | null = ""
 
-onSearch(): void {
-  if (!this.searchQuery.trim()) {
-    this.filteredPosts = this.initialPosts;
-  } else {
-    const query = this.searchQuery.toLowerCase();
-    this.filteredPosts = this.initialPosts.filter(post =>
-      post.title.toLowerCase().includes(query) ||
-      post.content.toLowerCase().includes(query) ||
-      post.username.toLowerCase().includes(query)
-    );
+
+  constructor(private postService: PostService,
+    private httpclient: HttpClient,
+    private authService: AuthService
+  ) { }
+  AuthenticateRoute = AuthenticatePage;
+  themeService: ThemeService = ThemeService.getInstance();
+  searchQuery: string = ""
+  initialPosts: PostResponse[] = []
+  filteredPosts: PostResponse[] = []
+  comment: CommentRequest = new (CommentRequest)
+
+  async ionViewWillEnter() {
+    this.postService.GetAllPosts().subscribe(async response => {
+      this.initialPosts = response;
+      this.filteredPosts = response;
+      this.loggedInUsername = await this.authService.getUsername();
+    });
   }
-}
+
+  onSearch(): void {
+    if (!this.searchQuery.trim()) {
+      this.filteredPosts = this.initialPosts;
+    } else {
+      const query = this.searchQuery.toLowerCase();
+      this.filteredPosts = this.initialPosts.filter(post =>
+        post.title.toLowerCase().includes(query) ||
+        post.content.toLowerCase().includes(query) ||
+        post.username.toLowerCase().includes(query)
+      );
+    }
+  }
 
   selectedPost: PostResponse | null = null;
 
@@ -55,13 +65,13 @@ onSearch(): void {
 
   submitComment() {
     if (this.comment.content === null || this.comment.content.trim() === "")
-      return; 
-    
+      return;
+
     if (this.selectedPost?.id !== undefined)
       this.comment.postId = this.selectedPost?.id;
-    
+
     console.log(this.comment);
-    
+
     this.httpclient.post<Comment>(Endpoints.REQUEST_COMMENT, this.comment, { withCredentials: true }).subscribe(
       (newComment: Comment) => {
         if (this.selectedPost) {
@@ -88,4 +98,29 @@ onSearch(): void {
   closePost() {
     this.selectedPost = null;
   }
+
+  toggleTheme() {
+    this.themeService.toggleTheme()
+  }
+
+  async sharePost(item: any) {
+    await Share.share({
+      title: item.title,
+      text: item.content,
+      dialogTitle: 'Share this post'
+    });
+  }
+  isPostOwner(post: PostResponse): boolean {
+    return this.loggedInUsername === post.username;
+  }
+
+  deletePost(post: PostResponse): void {
+    console.log(post.id)
+    this.postService.DeletePost(post.id).subscribe({
+    
+      error: (err) => this.ionViewWillEnter
+    });
+    this.ionViewWillEnter()
+  }
+  
 }

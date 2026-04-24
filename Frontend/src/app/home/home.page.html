@@ -6,18 +6,17 @@
   </ion-toolbar>
   <ion-toolbar>
     <ion-buttons>
-      <ion-button routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" expand="block">
+      <ion-button routerLink="/home" routerLinkActive="active" expand="block">
         <ion-icon slot="start" name="home-outline"></ion-icon>
         Home
       </ion-button>
-      <ion-button routerLink="/create-post" routerLinkActive="active" expand="block">
-        <ion-icon slot="start" name="add-circle-outline"></ion-icon>
-        Create
-      </ion-button>
+
       <ion-button routerLink="/authenticate" routerLinkActive="active" expand="block">
-        <ion-icon slot="start" name="person-outline"></ion-icon>
         Account
       </ion-button>
+
+      <ion-button expand="block" (click)="toggleTheme()">Change theme</ion-button>
+
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -30,10 +29,7 @@
   </ion-header>
 
   <div style="padding: 16px;">
-    <ion-searchbar 
-      show-clear-button="focus" 
-      [(ngModel)]="searchQuery"
-      (ionChange)="onSearch()"
+    <ion-searchbar show-clear-button="focus" [(ngModel)]="searchQuery" (ionChange)="onSearch()"
       placeholder="Search posts...">
     </ion-searchbar>
   </div>
@@ -47,32 +43,45 @@
 
   <ion-list lines="none" style="padding: 0 8px;">
     @for (item of filteredPosts; track $index) {
-      <ion-card button (click)="openPost(item)" style="margin: 8px 0;">
-        <ion-card-header>
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-              <ion-card-title>{{ item.title }}</ion-card-title>
-              <ion-card-subtitle>{{ item.username }}</ion-card-subtitle>
-            </div>
-            <ion-card-subtitle style="margin: 0;">{{ item.createdAt }}</ion-card-subtitle>
+    <ion-button fill="clear" size="small" (click)="sharePost(item)">
+      Share</ion-button>
+    @if (isPostOwner(item))
+    {
+    <ion-button fill="clear" size="small" (click)="deletePost(item)">
+      <ion-icon slot="start" name="trash-outline"></ion-icon>
+      Delete
+    </ion-button>
+    }
+
+
+    <ion-card button (click)="openPost(item)" style="margin: 8px 0;">
+      <ion-card-header>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <ion-card-title>{{ item.title }}</ion-card-title>
+            <ion-card-subtitle>{{ item.username }}</ion-card-subtitle>
           </div>
-        </ion-card-header>
+          <ion-card-subtitle style="margin: 0;">{{ item.createdAt }}</ion-card-subtitle>
+        </div>
+      </ion-card-header>
 
-        <ion-card-content>
-          <p style="margin: 0; line-height: 1.5;">
-            {{ item.content }}
-          </p>
-        </ion-card-content>
+      <ion-card-content>
+        <p style="margin: 0; line-height: 1.5;">
+          {{ item.content }}
+        </p>
+      </ion-card-content>
 
-        <ion-card-header style="padding-top: 0;">
-          <ion-chip size="small" outline>
-            <ion-label>{{ item.comments?.length || 0 }} comments</ion-label>
-          </ion-chip>
-        </ion-card-header>
-      </ion-card>
+      <ion-card-header style="padding-top: 0;">
+        <ion-chip size="small" outline>
+          <ion-label>{{ item.comments?.length || 0 }} comments</ion-label>
+        </ion-chip>
+
+      </ion-card-header>
+
+    </ion-card>
+
     }
   </ion-list>
-
   <ion-modal #postModal [isOpen]="selectedPost !== null" (didDismiss)="closePost()">
     <ng-template>
       <ion-header>
@@ -102,33 +111,30 @@
           <h3 style="margin-bottom: 16px;">Comments</h3>
           <ion-list lines="full" style="margin: 0 -16px 24px -16px;">
             @if (selectedPost?.comments && selectedPost?.comments?.length != 0) {
-              @for (c of selectedPost?.comments; track $index) {
-                <ion-item>
-                  <ion-avatar slot="start">
-                    <div style="width: 100%; height: 100%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: #333; font-weight: bold;">
-                      {{ c.username.charAt(0).toUpperCase() }}
-                    </div>
-                  </ion-avatar>
-                  <ion-label>
-                    <h3><strong>{{ c.username }}</strong></h3>
-                    <p>{{ c.content }}</p>
-                  </ion-label>
-                </ion-item>
-              }
+            @for (c of selectedPost?.comments; track $index) {
+            <ion-item>
+              <ion-avatar slot="start">
+                <div
+                  style="width: 100%; height: 100%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: #333; font-weight: bold;">
+                  {{ c.username.charAt(0).toUpperCase() }}
+                </div>
+              </ion-avatar>
+              <ion-label>
+                <h3><strong>{{ c.username }}</strong></h3>
+                <p>{{ c.content }}</p>
+              </ion-label>
+            </ion-item>
+            }
             } @else {
-              <ion-text style="padding: 16px;">
-                <p style="text-align: center;">No comments yet....</p>
-              </ion-text>
+            <ion-text style="padding: 16px;">
+              <p style="text-align: center;">No comments yet....</p>
+            </ion-text>
             }
           </ion-list>
 
           <ion-item>
-            <ion-input 
-              label="Add a comment..." 
-              labelPlacement="stacked" 
-              [(ngModel)]="comment.content"
-              placeholder="something very insightful"
-            ></ion-input>
+            <ion-input label="Add a comment..." labelPlacement="stacked" [(ngModel)]="comment.content"
+              placeholder="something very insightful"></ion-input>
           </ion-item>
 
           <div style="padding: 16px 0; display: flex; gap: 8px;">
