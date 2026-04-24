@@ -43,8 +43,7 @@
 
   <ion-list lines="none" style="padding: 0 8px;">
     @for (item of filteredPosts; track $index) {
-    <ion-button fill="clear" size="small" (click)="sharePost(item)">
-      Share</ion-button>
+    
     @if (isPostOwner(item))
     {
     <ion-button fill="clear" size="small" (click)="deletePost(item)">

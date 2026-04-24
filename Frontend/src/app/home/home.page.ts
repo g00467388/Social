@@ -103,13 +103,6 @@ export class HomePage {
     this.themeService.toggleTheme()
   }
 
-  async sharePost(item: any) {
-    await Share.share({
-      title: item.title,
-      text: item.content,
-      dialogTitle: 'Share this post'
-    });
-  }
   isPostOwner(post: PostResponse): boolean {
     return this.loggedInUsername === post.username;
   }

@@ -19,10 +19,7 @@ export class PostService {
     return this.httpClient.get<PostResponse[]>(Endpoints.REQUEST_POST_BY_TITLE + "?title=" + title);
   }
   DeletePost(id: number) {
-   return this.httpClient.delete(
-      `${Endpoints.REQUEST_POST_DELETE}/${id}`,
-      { withCredentials: true }
-    );
+   return this.httpClient.delete(`${Endpoints.REQUEST_POST_DELETE}/${id}`,{ withCredentials: true });
 
   }
 
