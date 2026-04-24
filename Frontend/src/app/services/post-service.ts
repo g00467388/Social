@@ -14,11 +14,18 @@ export class PostService {
   GetAllPosts(): Observable<PostResponse[]> {
     return this.httpClient.get<PostResponse[]>(Endpoints.REQUEST_POST_LIST);
   }
-GetPostByTitle(title: string): Observable<PostResponse[]> {
-  console.log("service title value: " + title)
-  return this.httpClient.get<PostResponse[]>(Endpoints.REQUEST_POST_BY_TITLE + "?title=" + title );
+  GetPostByTitle(title: string): Observable<PostResponse[]> {
+    console.log("service title value: " + title)
+    return this.httpClient.get<PostResponse[]>(Endpoints.REQUEST_POST_BY_TITLE + "?title=" + title);
+  }
+  DeletePost(id: number) {
+   return this.httpClient.delete(
+      `${Endpoints.REQUEST_POST_DELETE}/${id}`,
+      { withCredentials: true }
+    );
+
+  }
+
+
 }
 
-    
-
-}
